@@ -32,6 +32,8 @@
         h4 {
             margin-top: -5px;
         }
+
+
     </style>
 </head><body>
     <h3>Tiket Wisata</h3>
@@ -60,6 +62,14 @@
                 <td>:</td>
                 <td><b>LUNAS</b></td>
             </tr>
-
     </table>
+        <table border="0">
+        <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    <img class="qrcode" src="assets/img/qrcode/<?=$value['qr_code'] ?>" width="150px">
+                </td>
+            </tr>
+        </table>
 </body></html>

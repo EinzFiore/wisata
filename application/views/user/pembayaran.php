@@ -68,6 +68,11 @@
                                                     </th>
                                                 </tr>
                                                 <tr>
+                                                    <td>
+                                                        <img src="<?= base_url('assets/img/qrcode/') . $value['qr_code'] ?>" alt="">
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td></td>
                                                     <td></td>
                                                     <td><a href="<?= site_url('pemesanan/cetak_invoice/' . $value['id']); ?>" target="_blank" class="btn btn-danger"><i class="fas fa-print"></i> Cetak

@@ -72,14 +72,39 @@ class Pemesanan extends CI_Controller
             $data['member'] = $this->db->get_where('member', ['email' => $this->session->userdata('email')])->row_array();
             $this->load->view('user/pemesanan_wisata', $data);
         } else {
+            $data['member'] = $this->db->get_where('member', ['email' => $this->session->userdata('email')])->row_array();
             $tanggal    = $this->input->post('tanggal', true);
             $lama       = htmlspecialchars($this->input->post('lama', true));
+
+            $this->load->library('Ciqrcode');
+
+            $config['cacheable']    = true; //boolean, the default is true
+            $config['cachedir']     = './assets/'; //string, the default is application/cache/
+            $config['errorlog']     = './assets/'; //string, the default is application/logs/
+            $config['imagedir']     = './assets/img/qrcode/'; //direktori penyimpanan qr code
+            $config['quality']      = true; //boolean, the default is true
+            $config['size']         = '1024'; //interger, the default is 1024
+            $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+            $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+            $this->ciqrcode->initialize($config);
+    
+            $image_name=$data['member']['nama'].'.png'; //buat name dari qr code sesuai dengan nim
+
             $data       = [
                 'id_member' => $this->session->userdata('id'),
                 'id_wisata'   => $this->uri->segment(3),
                 'tanggal'   => $tanggal,
                 'lama'      => $lama,
+                'qr_code'   => $image_name,
             ];
+    
+            $params['data'] = $data; //data yang akan di jadikan QR CODE
+            $params['level'] = 'H'; //H=High
+            $params['size'] = 10;
+            $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+            $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+
             // update data status wisata
             $statusWisata    = [
                 'status'    => "Buka"
@@ -161,7 +186,7 @@ class Pemesanan extends CI_Controller
         $data['pemesanan']  = $this->WisataModel->getPemesananuser();
         $this->load->view('user/tiket', $data);
         $html   = $this->output->get_output();
-        $this->load->library('dompdf_gen');
+        $this->load->library('Dompdf_gen');
         $paper_size      = "A5";
         $orientation     = "Potrait";
         $this->dompdf->set_paper($paper_size, $orientation);

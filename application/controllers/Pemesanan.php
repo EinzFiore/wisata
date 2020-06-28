@@ -73,6 +73,7 @@ class Pemesanan extends CI_Controller
             $this->load->view('user/pemesanan_wisata', $data);
         } else {
             $data['member'] = $this->db->get_where('member', ['email' => $this->session->userdata('email')])->row_array();
+            $data['pemesanan']  = $this->WisataModel->getPemesananData();
             $tanggal    = $this->input->post('tanggal', true);
             $lama       = htmlspecialchars($this->input->post('lama', true));
 
@@ -97,8 +98,15 @@ class Pemesanan extends CI_Controller
                 'lama'      => $lama,
                 'qr_code'   => $image_name,
             ];
+            
+            $stat = "Lunas";
+            $nama = $this->input->post('nama');
+            $email = $this->input->post('email');
+            $harga = $this->input->post('harga');
+            $jumtik = $this->input->post('lama');
+            $totbay = $harga*$jumtik;
     
-            $params['data'] = $data; //data yang akan di jadikan QR CODE
+            $params['data'] = 'Nama : '.$nama.'   Email : '.$email.'  Harga Tiket : '.$harga.' Jumlah Tiket : '.$jumtik.'  Total Harga : '.$totbay.'  Status : '.$stat; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=High
             $params['size'] = 10;
             $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/

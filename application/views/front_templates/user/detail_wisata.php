@@ -34,7 +34,7 @@
                     <?php
                         date_default_timezone_set('Asia/Jakarta');
                         $time = date("G:i:s");
-                        if($wisata['jam_tutup'] < $time):
+                        if($wisata['jam_tutup'] > $time):
                     ?>
                     <div class="alert alert-danger" role="alert">
                         Mohon maaf, Wisata ini sedang <strong>Tutup</strong>
